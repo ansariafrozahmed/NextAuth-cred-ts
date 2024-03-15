@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Button, Form, Input } from "antd";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 
@@ -11,6 +11,7 @@ type FieldType = {
 };
 
 const SignInForm: React.FC = () => {
+  const { data: session, status } = useSession();
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
 
@@ -41,6 +42,10 @@ const SignInForm: React.FC = () => {
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
+
+  if (status === "authenticated") {
+    router.push("/");
+  }
 
   return (
     <div className="w-[500px] shadow-md px-8 py-12 rounded-xl border">
